@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Omar Afghan | Luxury Cars</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="header">
+
+        <div class="logo">
+            OMAR <span>AFGHAN</span>
+        </div>
+
+        <nav>
+            <a href="#home">Home</a>
+            <a href="#cars">Cars</a>
+            <a href="#about">About</a>
+            <a href="#contact">Contact</a>
+        </nav>
+
+        <a href="#cars" class="nav-button">Explore Cars</a>
+
+    </header>
+
+
+    <!-- HERO -->
+    <section class="hero" id="home">
+
+        <div class="hero-content">
+
+            <p class="small-title">PREMIUM CAR SHOWROOM</p>
+
+            <h1>
+                Drive Your
+                <span>Dream Car.</span>
+            </h1>
+
+            <p class="hero-text">
+                Discover premium and luxury vehicles at Omar Afghan.
+                Find the car that matches your style.
+            </p>
+
+            <div class="hero-buttons">
+
+                <a href="#cars" class="main-button">
+                    Explore Cars
+                </a>
+
+                <a href="#contact" class="second-button">
+                    Contact Us
+                </a>
+
+            </div>
+
+        </div>
+
+        <div class="hero-image">
+
+            <div class="image-placeholder">
+                <img src="img/1.jpg"
+                     alt="Luxury car at Omar Afghan showroom"
+                     class="big-img">
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- SEARCH -->
+    <section class="search-section">
+
+        <p>FIND YOUR CAR</p>
+
+        <h2>Search Your Dream Car</h2>
+
+        <div class="search-box">
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Search Lexus, BMW, Toyota..."
+            >
+
+            <button id="searchButton" type="button">
+                Search
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- FEATURED CARS -->
+    <section class="cars-section" id="cars">
+
+        <div class="section-heading">
+
+            <div>
+                <p>OUR COLLECTION</p>
+                <h2>Featured Cars</h2>
+            </div>
+
+            <button
+                id="viewMoreButton"
+                class="view-more-button"
+                type="button">
+                View More
+            </button>
+
+        </div>
+
+
+        <div class="cars-grid" id="carsGrid">
+
+            <!-- LEXUS -->
+            <div class="car-card">
+
+                <div class="car-image">
+                    <img src="img/33.jpg" alt="Lexus LX">
+                </div>
+
+                <div class="car-info">
+
+                    <p class="car-type">LUXURY SUV</p>
+
+                    <h3>Lexus LX</h3>
+
+                    <p>
+                        Premium luxury SUV with a powerful design.
+                    </p>
+
+                    <button
+                        class="details-button"
+                        type="button"
+                        data-car="Lexus LX">
+                        View Details
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- TOYOTA LAND CRUISER -->
+            <div class="car-card">
+
+                <div class="car-image">
+                    <img src="img/3.jpg" alt="Toyota Land Cruiser">
+                </div>
+
+                <div class="car-info">
+
+                    <p class="car-type">PREMIUM SUV</p>
+
+                    <h3>Toyota Land Cruiser</h3>
+
+                    <p>
+                        Powerful, comfortable and ready for every road.
+                    </p>
+
+                    <button
+                        class="details-button"
+                        type="button"
+                        data-car="Toyota Land Cruiser">
+                        View Details
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- MERCEDES -->
+            <div class="car-card">
+                <div class="car-image">
+                    <!-- <span>Mercedes Image</span> -->
+                    <img src="img/photo_2026-10-07_10-34-39.jpg" alt="Mercedes-Benz">
+                </div>
+
+                <div class="car-info">
+
+                    <p class="car-type">LUXURY SEDAN</p>
+
+                    <h3>Mercedes-Benz</h3>
+
+                    <p>
+                        Elegant design combined with modern technology.
+                    </p>
+
+                    <button
+                        class="details-button"
+                        type="button"
+                        data-car="Mercedes-Benz">
+                        View Details
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- RANGE ROVER -->
+            <div class="car-card more-car">
+
+                <div class="car-image">
+                    <span>Range Rover Image</span>
+                </div>
+
+                <div class="car-info">
+
+                    <p class="car-type">LUXURY SUV</p>
+
+                    <h3>Range Rover</h3>
+
+                    <p>
+                        Modern luxury and exceptional comfort.
+                    </p>
+
+                    <button
+                        class="details-button"
+                        type="button"
+                        data-car="Range Rover">
+                        View Details
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- BMW -->
+            <div class="car-card more-car">
+
+                <div class="car-image">
+                    <span>BMW Image</span>
+                </div>
+
+                <div class="car-info">
+
+                    <p class="car-type">LUXURY SUV</p>
+
+                    <h3>BMW X7</h3>
+
+                    <p>
+                        A modern combination of performance and luxury.
+                    </p>
+
+                    <button
+                        class="details-button"
+                        type="button"
+                        data-car="BMW X7">
+                        View Details
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- ROLLS ROYCE -->
+            <div class="car-card more-car">
+
+                <div class="car-image">
+                    <span>Rolls Royce Image</span>
+                </div>
+
+                <div class="car-info">
+
+                    <p class="car-type">ULTRA LUXURY</p>
+
+                    <h3>Rolls Royce</h3>
+
+                    <p>
+                        Exceptional luxury with a unique presence.
+                    </p>
+
+                    <button
+                        class="details-button"
+                        type="button"
+                        data-car="Rolls Royce">
+                        View Details
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ABOUT -->
+    <section class="about-section" id="about">
+
+        <div class="about-image">
+
+            <div class="image-placeholder">
+                
+                      <img src="img/1.jpg"
+                     alt=" Omar Afghan showroom"
+                     class="big-img">
+
+            </div>
+
+        </div>
+
+        <div class="about-content">
+
+            <p>ABOUT OMAR AFGHAN</p>
+
+            <h2>
+                Your Destination For
+                <span>Premium Cars.</span>
+            </h2>
+
+            <p>
+                Omar Afghan is a premium car showroom offering
+                a collection of luxury and high-quality vehicles.
+                Our goal is to help customers find a vehicle
+                that matches their needs and style.
+            </p>
+
+            <a href="#contact" class="main-button">
+                Learn More
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- WHY CHOOSE US -->
+    <section class="why-section">
+
+        <div class="section-title">
+
+            <p>WHY CHOOSE US</p>
+
+            <h2>Experience The Difference</h2>
+
+        </div>
+
+        <div class="features">
+
+            <div class="feature">
+
+                <div class="feature-number">01</div>
+
+                <h3>Premium Cars</h3>
+                <p>
+                    Carefully selected luxury and premium vehicles.
+                </p>
+
+            </div>
+
+            <div class="feature">
+
+                <div class="feature-number">02</div>
+
+                <h3>Trusted Service</h3>
+
+                <p>
+                    Professional service for every customer.
+                </p>
+
+            </div>
+
+            <div class="feature">
+
+                <div class="feature-number">03</div>
+
+                <h3>Easy Experience</h3>
+
+                <p>
+                    Simple and comfortable car buying experience.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- CONTACT -->
+    <section class="contact-section" id="contact">
+
+        <div class="contact-content">
+
+            <p class="section-label">GET IN TOUCH</p>
+
+            <h2>Find Your Dream Car</h2>
+
+            <p>
+                Explore our collection and find a car that suits your style.
+                Contact us to learn more about our vehicles.
+            </p>
+
+            <div class="contact-buttons">
+
+                <a href="#cars" class="contact-btn">
+                    Explore Cars
+                </a>
+
+                <a href="#home" class="contact-btn secondary">
+                    Back to Home
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- FOOTER -->
+    <footer class="footer">
+
+        <h3>OMAR AFGHAN</h3>
+
+        <p>Premium Cars. Trusted Service. Luxury Experience.</p>
+
+        <p class="copyright">
+            &copy; 2026 Omar Afghan. All rights reserved.
+        </p>
+
+    </footer>
+
+
+    <script src="script.js"></script>
+
+</body>
+</html>
