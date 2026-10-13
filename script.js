@@ -1,76 +1,46 @@
-// =====================================
-// OMAR AFGHAN - CAR SHOWROOM
-// Search, View More and Car Details
-// =====================================
+
+/* =====================================
+   OMAR AFGHAN - CAR SHOWROOM
+   Search, View More and Car Details
+   Plain JavaScript + JSON Data
+===================================== */
 
 
-// 1. CAR INFORMATION
-// Prices are US starting MSRP references, not Herat prices.
+/* 1. CAR DATA */
 
-const carInformation = {
-    "Lexus LX": {
-        category: "Luxury SUV",
-        engine: "3.4L twin-turbo V6",
-        drive: "Full-time 4WD",
-        seats: "Up to 7",
-        price: "From $108,050 USD",
-        priceNote: "2026 US starting MSRP reference for Lexus LX 600 Premium. Local price depends on model, year, condition, taxes and import costs.",
-        description: "A flagship luxury SUV combining strong performance, a refined interior and full-time four-wheel drive."
-    },
+let carInformation = [];
+let carDataLoaded = false;
 
-    "Toyota Land Cruiser": {
-        category: "Premium SUV",
-        engine: "2.4L turbo hybrid",
-        drive: "Full-time 4WD",
-        seats: "5",
-        price: "From $57,200 USD",
-        priceNote: "2026 US starting MSRP reference. This is not a confirmed price for a vehicle in Afghanistan.",
-        description: "A capable SUV designed for demanding roads, with a turbo-hybrid powertrain and advanced off-road systems."
-    },
+async function loadCarData() {
+    try {
+        const response = await fetch("./data/cars.json");
 
-    "Mercedes-Benz": {
-        category: "Luxury vehicle",
-        engine: "Depends on model",
-        drive: "Depends on model",
-        seats: "Depends on model",
-        price: "Contact for price",
-        priceNote: "Mercedes-Benz has many models. The exact model, year and trim are needed for a reliable price.",
-        description: "Mercedes-Benz offers luxury sedans and SUVs with premium interiors, modern technology and a range of powertrains."
-    },
+        if (!response.ok) {
+            throw new Error(
+                "Failed to load cars.json: " + response.status
+            );
+        }
 
-    "Range Rover": {
-        category: "Luxury SUV",
-        engine: "Depends on model",
-        drive: "Model dependent",
-        seats: "Model dependent",
-        price: "Contact for price",
-        priceNote: "Range Rover pricing varies by model year, trim, engine and market.",
-        description: "A luxury SUV family known for a comfortable cabin, distinctive design and all-terrain capability."
-    },
+        const data = await response.json();
 
-    "BMW X7": {
-        category: "Luxury SUV",
-        engine: "3.0L turbo inline-six (xDrive40i)",
-        drive: "All-wheel drive",
-        seats: "Up to 7",
-        price: "From $87,500 USD",
-        priceNote: "US starting MSRP reference for the 2026 BMW X7 xDrive40i. Not a confirmed local or used-car price.",
-        description: "A spacious three-row luxury SUV combining turbocharged performance, technology and a premium interior."
-    },
+        if (!Array.isArray(data)) {
+            throw new Error("cars.json must contain an array.");
+        }
 
-    "Rolls Royce": {
-        category: "Ultra-luxury vehicle",
-        engine: "Depends on model",
-        drive: "Depends on model",
-        seats: "Depends on model",
-        price: "Contact for price",
-        priceNote: "The exact model, such as Cullinan or Ghost, and its year are required for an accurate price.",
-        description: "Rolls-Royce vehicles focus on handcrafted luxury, quiet comfort and distinctive design."
+        carInformation = data;
+        carDataLoaded = true;
+
+        console.log("Car data loaded successfully:", carInformation);
+
+    } catch (error) {
+        console.error("Error loading car data:", error);
     }
-};
+}
+
+loadCarData();
 
 
-// 2. FIND EXISTING HTML ELEMENTS
+/* 2. HTML ELEMENTS */
 
 const searchInput = document.getElementById("searchInput");
 const searchButton = document.getElementById("searchButton");
@@ -84,11 +54,12 @@ const detailButtons = document.querySelectorAll(".details-button");
 const carModal = document.getElementById("carModal");
 const closeCarModal = document.getElementById("closeCarModal");
 
-
-// 3. VIEW MORE
-
 let allCarsVisible = false;
 
+
+/* 3. VIEW MORE / SHOW LESS */
+
+// Display all additional cars
 function showAllCars() {
     allCarsVisible = true;
 
@@ -99,16 +70,18 @@ function showAllCars() {
     viewMoreButton.textContent = "Show Less";
 }
 
+// Display only the featured cars
 function showFeaturedCars() {
     allCarsVisible = false;
 
     moreCars.forEach(function (car) {
-        car.style.display = matches ?"block":"none";
+        car.style.display = "none";
     });
 
     viewMoreButton.textContent = "View More";
 }
 
+// View More button
 viewMoreButton.addEventListener("click", function () {
     if (allCarsVisible) {
         showFeaturedCars();
@@ -116,13 +89,52 @@ viewMoreButton.addEventListener("click", function () {
         showAllCars();
     }
 });
-// 4. SEARCH CARS
+
+
+/* 4. SEARCH HELPERS */
+
+// Ignore spaces, hyphens and punctuation
+function normalizeText(text) {
+    return String(text || "")
+        .toLowerCase()
+        .replace(/[^a-z0-9]/g, "");
+}
+
+// Create the no-results message
+function getNoResultsElement() {
+    let noResults = document.getElementById("noCarResults");
+
+    if (!noResults) {
+        noResults = document.createElement("p");
+        noResults.id = "noCarResults";
+
+        noResults.style.cssText = `
+            grid-column: 1 / -1;
+            width: 100%;
+            text-align: center;
+            color: #d8ad55;
+            padding: 25px;
+        `;
+
+        carsGrid.appendChild(noResults);
+    }
+
+    return noResults;
+}
+
+
+/* 5. SEARCH CARS */
 
 function searchCars() {
-    const searchText = searchInput.value.trim().toLowerCase();
+    const searchText = searchInput.value.trim();
+    const cleanSearch = normalizeText(searchText);
+    const noResults = getNoResultsElement();
 
-    // An empty search restores the normal collection.
-    if (searchText === "") {
+    // Restore the original collection when search is empty
+    if (cleanSearch === "") {
+        noResults.style.display = "none";
+        viewMoreButton.style.display = "";
+
         carCards.forEach(function (car) {
             car.style.display = "";
         });
@@ -131,64 +143,84 @@ function searchCars() {
         return;
     }
 
-    // Reveal all cards while searching, including extra cars.
-    moreCars.forEach(function (car) {
-        car.style.display = "block";
-    });
-
     let matchFound = false;
 
-    carCards.forEach(function (car) {
-        // const carName = car.querySelector("h3").textContent.toLowerCase();
-        const carName = car.querySelector("h3").textContent.trim().toLowerCase().replace(/[^a-z0-9]/g, "");
-        const carDescription = car.textContent.toLowerCase();
+    carCards.forEach(function (card) {
+        const heading = card.querySelector("h3");
 
-        // const matches =
-        //     carName.includes(searchText) ||
-        //     carDescription.includes(searchText);
-        const cleanSearch = searchText.replace(/[^a-z0-9]/g, "");
+        const carName = heading
+            ? heading.textContent.trim()
+            : "";
 
-const matches =
-    carName.includes(cleanSearch) ||
-    carDescription.includes(searchText);
+        // Find matching data in cars.json
+        const carInfo = carInformation.find(function (item) {
+            return normalizeText(item.name) === normalizeText(carName);
+        });
 
-        car.style.display = matches ? "" : "none";
+        // Search card text and all relevant JSON fields
+        const searchableParts = [
+            carName,
+            card.textContent
+        ];
+
+        if (carInfo) {
+            searchableParts.push(
+                carInfo.name,
+                carInfo.category,
+                carInfo.engine,
+                carInfo.drive,
+                carInfo.seats,
+                carInfo.price,
+                carInfo.description
+            );
+
+            if (Array.isArray(carInfo.keywords)) {
+                searchableParts.push(...carInfo.keywords);
+            }
+        }
+
+        const searchableText = normalizeText(
+            searchableParts.join(" ")
+        );
+
+        const matches = searchableText.includes(cleanSearch);
+
+        // Explicitly display matching cards, including more-car cards
+        card.style.display = matches ? "block" : "none";
 
         if (matches) {
             matchFound = true;
         }
     });
 
+    // Hide View More while displaying search results
     viewMoreButton.style.display = "none";
 
-    // Add a helpful message if no car matches.
-    let noResults = document.getElementById("noCarResults");
+    // Show or hide the no-results message
+    if (matchFound) {
+        noResults.style.display = "none";
+        noResults.textContent = "";
+    } else {
+        noResults.textContent =
+            "No matching cars found. Try Lexus, BMW, Toyota or Mercedes.";
 
-    if (!noResults) {
-        noResults = document.createElement("p");
-        noResults.id = "noCarResults";
-        noResults.style.cssText =
-            "grid-column:1/-1;text-align:center;color:#d8ad55;padding:25px;";
-        carsGrid.appendChild(noResults);
+        noResults.style.display = "block";
     }
-
-    noResults.textContent = matchFound
-        ? ""
-        : "No matching cars found. Try Lexus, BMW, Toyota or Mercedes.";
-
-    noResults.style.display = matchFound ? "none" : "block";
 }
 
+
+// Search button click
 searchButton.addEventListener("click", searchCars);
 
-// Pressing Enter runs the same search.
+// Press Enter to search
 searchInput.addEventListener("keydown", function (event) {
     if (event.key === "Enter") {
+        event.preventDefault();
         searchCars();
     }
 });
 
-// Restore all cars and the View More button when the search is cleared.
+// Restore featured cars when the input is cleared
 searchInput.addEventListener("input", function () {
     if (searchInput.value.trim() === "") {
         const noResults = document.getElementById("noCarResults");
@@ -198,6 +230,7 @@ searchInput.addEventListener("input", function () {
         }
 
         viewMoreButton.style.display = "";
+
         carCards.forEach(function (car) {
             car.style.display = "";
         });
@@ -207,64 +240,107 @@ searchInput.addEventListener("input", function () {
 });
 
 
-// 5. OPEN CAR DETAILS
+/* 6. OPEN CAR DETAILS */
 
 function openCarDetails(carName) {
-    const info = carInformation[carName];
+    const info = carInformation.find(function (car) {
+        return normalizeText(car.name) === normalizeText(carName);
+    });
 
     if (!info) {
-        alert("Car information is not available yet.");
+        alert(
+            carDataLoaded
+                ? "Car information is not available yet."
+                : "Car data is still loading. Please try again."
+        );
+
         return;
     }
 
-    document.getElementById("modalCarName").textContent = carName;
-    document.getElementById("modalCarDescription").textContent = info.description;
-    document.getElementById("modalCategory").textContent = info.category;
-    document.getElementById("modalEngine").textContent = info.engine;
-    document.getElementById("modalDrive").textContent = info.drive;
-    document.getElementById("modalSeats").textContent = info.seats;
-    document.getElementById("modalPrice").textContent = info.price;
-    document.getElementById("modalPriceNote").textContent = info.priceNote;
+    document.getElementById("modalCarName").textContent =
+        info.name;
+
+    document.getElementById("modalCarDescription").textContent =
+        info.description || "Contact us for more information.";
+
+    document.getElementById("modalCategory").textContent =
+        info.category || "Not specified";
+
+    document.getElementById("modalEngine").textContent =
+        info.engine || "Not specified";
+
+    document.getElementById("modalDrive").textContent =
+        info.drive || "Not specified";
+
+    document.getElementById("modalSeats").textContent =
+        info.seats || "Not specified";
+
+    document.getElementById("modalPrice").textContent =
+        info.price || "Contact for price";
+
+    document.getElementById("modalPriceNote").textContent =
+        info.priceNote || "";
 
     carModal.classList.add("is-open");
+
     carModal.setAttribute("aria-hidden", "false");
+
     document.body.style.overflow = "hidden";
 
     closeCarModal.focus();
 }
 
+
+// Connect every View Details button
 detailButtons.forEach(function (button) {
     button.addEventListener("click", function () {
         const carName = button.getAttribute("data-car");
+
         openCarDetails(carName);
     });
 });
 
 
-// 6. CLOSE THE DETAILS WINDOW
+/* 7. CLOSE CAR DETAILS */
 
 function closeDetails() {
     carModal.classList.remove("is-open");
+
     carModal.setAttribute("aria-hidden", "true");
+
     document.body.style.overflow = "";
 }
 
+// Close button
 closeCarModal.addEventListener("click", closeDetails);
 
-// Close when clicking the dark background.
+// Close by clicking the dark background
 carModal.addEventListener("click", function (event) {
     if (event.target === carModal) {
         closeDetails();
     }
 });
 
-// Close with the Escape key.
+// Close with Escape
 document.addEventListener("keydown", function (event) {
-    if (event.key === "Escape" && carModal.classList.contains("is-open")) {
+    if (
+        event.key === "Escape" &&
+        carModal.classList.contains("is-open")
+    ) {
         closeDetails();
     }
 });
-// Close the popup before following the contact link.
-document.getElementById("modalContact").addEventListener("click", function () {
-    closeDetails();
-});
+
+// Close the popup before navigating to Contact
+document.getElementById("modalContact").addEventListener(
+    "click",
+    function () {
+        closeDetails();
+    }
+);
+
+
+/* 8. INITIAL DISPLAY */
+
+// Start with only the three featured cars
+showFeaturedCars();
